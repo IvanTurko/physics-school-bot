@@ -1,0 +1,28 @@
+[Unit]
+Description=Physics school Telegram bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/opt/bot/bot
+WorkingDirectory=/opt/bot
+EnvironmentFile=/opt/bot/.env
+# The database lives in the state directory, owned by the dynamic user.
+# EnvironmentFile is read after Environment, so .env can still override DB_PATH.
+Environment=DB_PATH=/var/lib/bot/bot.db
+# The key stays root-only; the bot reads its copy in /run/credentials/bot.service.
+LoadCredential=google.json:/opt/bot/google.json
+Restart=always
+RestartSec=5
+# Shutdown drains the queues for up to 30 s.
+TimeoutStopSec=45
+
+DynamicUser=yes
+StateDirectory=bot
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

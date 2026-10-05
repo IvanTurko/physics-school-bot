@@ -1,0 +1,70 @@
+version: "2"
+
+linters:
+  default: all
+  disable:
+    # layout and name length: gofumpt keeps the layout
+    - wsl
+    - wsl_v5
+    - nlreturn
+    - lll
+    - godot
+    - varnamelen
+    - funcorder
+    - noinlineerr
+    # function size is not a defect
+    - funlen
+    - cyclop
+    - gocognit
+    - nestif
+    - gocyclo
+    - maintidx
+    - dupl
+    # errors are wrapped where a cause comes from outside, not everywhere
+    - wrapcheck
+    - err113
+    # zero fields, interface results and named results are legal Go
+    - exhaustruct
+    - exhaustruct_v5
+    - ireturn
+    - nonamedreturns
+    - forcetypeassert
+    # embedded files, in-package tests, parallelism where needed
+    - gochecknoglobals
+    - testpackage
+    - paralleltest
+    - tparallel
+    - thelper
+    # noisy without per-project setup; revive repeats staticcheck
+    - depguard
+    - mnd
+    - tagliatelle
+    - gosmopolitan
+    - dupword
+    - godox
+    - revive
+    # deprecated in golangci-lint itself
+    - gomodguard
+
+  # Findings kept on purpose.
+  exclusions:
+    rules:
+      - linters: [containedctx]
+        path: internal/transport/telegram/dispatcher\.go
+      - linters: [errcheck]
+        text: "`tx.Rollback`|`rows.Close`"
+      - linters: [errcheck, gosec]
+        path: _test\.go
+        text: "`io.WriteString`|G104"
+      - linters: [goconst]
+        path: _test\.go
+      - linters: [gosec]
+        path: internal/app/app\.go
+        text: G304
+      - linters: [gosec]
+        path: internal/config/config_test\.go
+        text: G101
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
